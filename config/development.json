@@ -1,0 +1,4 @@
+{
+  "port": "8080",
+  "mongoUrl": "mongodb+srv://uuser:uuser@cluster0.1enss.mongodb.net/Cluster0?retryWrites=true&w=majority"
+}
