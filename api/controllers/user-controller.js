@@ -13,30 +13,34 @@ userController.getUserById = (async (ctx, next) => {
   ctx.body = result
 });
 
-userController.registerUser = (async (ctx) => {
-
+userController.addUser = (async (ctx) => {
+  console.log(ctx.request.body)
   let result = await UserModel.saveUser(
-    ctx.request.body.name,
-    ctx.request.body.email,
     ctx.request.body.nickname,
+    ctx.request.body.email,
+    ctx.request.body.password
   );
 
   if (result.err) throw ctx.throw(result.status, result.err)
   ctx.status = 200;
-  ctx.body = result
+  ctx.body = result;
 });
 
-userController.getUserByEmail = (async (ctx) => {
-  console.log(ctx.params.email)
-  let result = await UserModel.findByEmail(ctx.params.email);
-  if (result.err) throw ctx.throw(result.status, result.err)
-  ctx.status = 200;
+
+userController.loginUser = (async (ctx) => {
+console.log('login', ctx.request.body.email, ctx.request.body.password)
+  let result = await UserModel.loginUser(
+    ctx.request.body.email,
+    ctx.request.body.password
+  );
+  // if (!result || result.err) throw ctx.throw(result.status, result.err)
+  // ctx.status = 200;
   ctx.body = result
 });
 
 userController.getUsers = (async (ctx) => {
   let result = await UserModel.GetAllUsers();
-  
+
   if (result.err) throw ctx.throw(result.status, result.err)
   ctx.status = 200;
   ctx.body = result

@@ -5,8 +5,8 @@ const userController = require('../controllers/user-controller')
 
 
 userRouter.get('/user/:id', userController.getUserById);
-userRouter.get('/users/login/:email', userController.getUserByEmail);
+userRouter.post('/users/login', koaBody(), userController.loginUser);
 userRouter.get('/users/userslist', userController.getUsers)
-userRouter.post('/users', koaBody(), userController.registerUser);
+userRouter.post('/registration', koaBody(), userController.addUser);
 
 module.exports = userRouter;

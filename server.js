@@ -11,11 +11,20 @@ app
     ctx.set('Access-Control-Allow-Origin', '*');
     ctx.set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     ctx.set('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
-    await next();
-    
+    try {
+      await next();
+    } catch (err) {
+      ctx.status = err.status || 500;
+      ctx.body = { error: err.message || err }
+      ctx.app.emit('error', err, ctx);
+    }
   })
   .use(userRouter.routes())
-  .use(userRouter.allowedMethods());
+  .use(userRouter.allowedMethods())
 
+
+  app.on('error', (err, ctx) => {
+    console.log(err);
+  });
 app.listen(config.port);
 
