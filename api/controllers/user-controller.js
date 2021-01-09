@@ -1,5 +1,4 @@
-const UserModel = require('../models/user-model')
-const User = require('../models/user-model');
+const UserModel = require('../models/user-model');
 
 let userController = {}
 
@@ -28,13 +27,13 @@ userController.addUser = (async (ctx) => {
 
 
 userController.loginUser = (async (ctx) => {
-console.log('login', ctx.request.body.email, ctx.request.body.password)
+  console.log('login', ctx.request.body.email, ctx.request.body.password)
   let result = await UserModel.loginUser(
     ctx.request.body.email,
     ctx.request.body.password
   );
-  // if (!result || result.err) throw ctx.throw(result.status, result.err)
-  // ctx.status = 200;
+  if (!result || result.err) throw ctx.throw(result.status, result.err)
+  ctx.status = 200;
   ctx.body = result
 });
 
@@ -46,4 +45,12 @@ userController.getUsers = (async (ctx) => {
   ctx.body = result
 });
 
+userController.topScores = (async (ctx) => {
+
+  let result = await UserModel.getTopScores(ctx.request.query.skip, ctx.request.query.limit)
+
+  if (result.err) throw ctx.throw(result.status, result.err)
+  ctx.status = 200;
+  ctx.body = result;
+});
 module.exports = userController;

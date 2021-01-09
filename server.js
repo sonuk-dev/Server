@@ -22,9 +22,9 @@ app
   .use(userRouter.routes())
   .use(userRouter.allowedMethods())
 
-
   app.on('error', (err, ctx) => {
-    console.log(err);
+    console.error('server error', err.message);
+    console.error(err);
   });
 app.listen(config.port);
 
