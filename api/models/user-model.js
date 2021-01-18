@@ -55,14 +55,35 @@ Users.getTopScores = (async (skip, limit) => {
 
 Users.loginUser = (async (email, password) => {
   let user = await Users.findOne({ email: email });
-  
+
   if (!user)
-    return {status: 400, err: `{"email": "doesn't exist"}`};
+    return { status: 400, err: `{"email": "doesn't exist"}` };
 
   let crypt = await bcrypt.compare(password, user.password);
   if (crypt) {
     return user;
   }
-  return {status: 400, err: `{"password": "Password is wrong"}`};
+  return { status: 400, err: `{"password": "Password is wrong"}` };
+});
+
+Users.getChangeBestScore = (async (_id, bestScore) => {
+  const filter = { _id: _id };
+  const update = { bestScore: bestScore };
+  console.log(filter, update)
+  return Users.findOneAndUpdate(filter, update, {
+    new: true
+  });
+});
+
+Users.updateUser = (async (_id, nickname, email) => {
+  const filter = { _id: _id };
+  const update = { 
+    nickname: nickname,
+    email: email
+ };
+  console.log(filter, update)
+  return Users.findOneAndUpdate(filter, update, {
+    new: true
+  });
 });
 module.exports = Users;

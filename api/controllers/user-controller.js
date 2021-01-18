@@ -1,4 +1,5 @@
 const UserModel = require('../models/user-model');
+const jwt = require('jsonwebtoken');
 
 let userController = {}
 
@@ -13,7 +14,6 @@ userController.getUserById = (async (ctx, next) => {
 });
 
 userController.addUser = (async (ctx) => {
-  console.log(ctx.request.body)
   let result = await UserModel.saveUser(
     ctx.request.body.nickname,
     ctx.request.body.email,
@@ -21,20 +21,26 @@ userController.addUser = (async (ctx) => {
   );
 
   if (result.err) throw ctx.throw(result.status, result.err)
+  const token = jwt.sign({ user: result }, 'A very secret key')
   ctx.status = 200;
-  ctx.body = result;
+  ctx.body = {
+    user: result,
+    token
+  }
 });
 
-
 userController.loginUser = (async (ctx) => {
-  console.log('login', ctx.request.body.email, ctx.request.body.password)
   let result = await UserModel.loginUser(
     ctx.request.body.email,
     ctx.request.body.password
   );
   if (!result || result.err) throw ctx.throw(result.status, result.err)
+  const token = jwt.sign({ user: result }, 'A very secret key')
   ctx.status = 200;
-  ctx.body = result
+  ctx.body = {
+    user: result,
+    token
+  }
 });
 
 userController.getUsers = (async (ctx) => {
@@ -52,5 +58,27 @@ userController.topScores = (async (ctx) => {
   if (result.err) throw ctx.throw(result.status, result.err)
   ctx.status = 200;
   ctx.body = result;
+});
+
+userController.changeBestScore = (async (ctx) => {
+  let result = await UserModel.getChangeBestScore(ctx.request.body._id, ctx.request.body.bestScore)
+
+  const token = jwt.sign({ user: result }, 'A very secret key')
+  ctx.status = 200;
+  ctx.body = {
+    user: result,
+    token
+  }
+});
+
+userController.updateUser = (async (ctx) => {
+  let result = await UserModel.updateUser(ctx.request.body._id, ctx.request.body.nickname, ctx.request.body.email)
+
+  const token = jwt.sign({ user: result }, 'A very secret key')
+  ctx.status = 200;
+  ctx.body = {
+    user: result,
+    token
+  }
 });
 module.exports = userController;
