@@ -2,6 +2,7 @@ const Koa = require("koa");
 const app = new Koa();
 const config = require('./config/index');
 const userRouter = require('./api/routers/user-router');
+const gamesRouter = require('./api/routers/games-router');
 const mongoConnect = require('./libs/mongo-connection');
 
 
@@ -21,6 +22,9 @@ app
   })
   .use(userRouter.routes())
   .use(userRouter.allowedMethods())
+
+  .use(gamesRouter.routes())
+  .use(gamesRouter.allowedMethods())
 
   app.on('error', (err, ctx) => {
     console.error('server error', err.message);

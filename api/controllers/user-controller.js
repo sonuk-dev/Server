@@ -1,4 +1,5 @@
 const UserModel = require('../models/user-model');
+const GamesModel = require('../models/games-model')
 const jwt = require('jsonwebtoken');
 
 let userController = {}
@@ -21,7 +22,8 @@ userController.addUser = (async (ctx) => {
   );
 
   if (result.err) throw ctx.throw(result.status, result.err)
-  const token = jwt.sign({ user: result }, 'A very secret key')
+  const token = jwt.sign({ user: result }, 'A very secret key');
+  GamesModel.createGamesObj(result._id);
   ctx.status = 200;
   ctx.body = {
     user: result,
