@@ -4,7 +4,7 @@ const config = require('./config/index');
 const userRouter = require('./api/routers/user-router');
 const gamesRouter = require('./api/routers/games-router');
 const mongoConnect = require('./libs/mongo-connection');
-
+const koaBody = require('koa-body');
 
 mongoConnect(config);
 app
@@ -20,6 +20,7 @@ app
       ctx.app.emit('error', err, ctx);
     }
   })
+  .use(koaBody())
   .use(userRouter.routes())
   .use(userRouter.allowedMethods())
 
