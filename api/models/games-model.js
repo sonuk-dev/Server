@@ -2,26 +2,23 @@ const mongoose = require('mongoose');
 
 const GamesSchema = new mongoose.Schema({
     userId: mongoose.Schema.ObjectId,
-    games: [
-        {
-            date: Date,
-            score: Number
-        }
-    ]
+    date: Date,
+    score: Number
 });
 
 const Games = mongoose.model('Games', GamesSchema);
 
-Games.createGamesObj = (userId) => {
-    const games = new Games({
-        userId: userId,
-        games: []
+Games.createGamesObj = (userId, date, score) => {
+    const gameObj = new Games({
+        userId,
+        date,
+        score
     });
-    return games.save();
+    return gameObj.save();
 }
 
 Games.findGamesObjByUserId = (userId) => {
-    return Games.findOne({ userId });
+    return Games.find({ userId });
 }
 
 module.exports = Games;
