@@ -1,10 +1,14 @@
-const Router = require('@koa/router');
-const userRouter = new Router();
+// const Router = require('@koa/router');
+// const userRouter = new Router();
+const JoiRouter = require("koa-joi-router");
+const userRouter = new JoiRouter();
 const userController = require('../controllers/user-controller')
 const jwt = require('../../libs/jwt')
+const validator = require('../../libs/validation')
+const Joi = JoiRouter.Joi;
 
-userRouter.post('/users/login', userController.loginUser);
-userRouter.post('/registration', userController.addUser);
+userRouter.post('/users/login', validator.loginValidator, userController.loginUser);
+userRouter.post('/registration', validator.registrationValidator, userController.addUser);
 
 userRouter.get('/user/:id', jwt, userController.getUserById);
 userRouter.get('/users', jwt, userController.getUsers);

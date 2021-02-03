@@ -21,8 +21,9 @@ app
     }
   })
   .use(koaBody())
-  .use(userRouter.routes())
-  .use(userRouter.allowedMethods())
+  // .use(userRouter.routes())
+  // .use(userRouter.allowedMethods())
+  .use(userRouter.middleware())
 
   .use(gamesRouter.routes())
   .use(gamesRouter.allowedMethods())
@@ -31,5 +32,7 @@ app
     console.error('server error', err.message);
     console.error(err);
   });
+
+
 app.listen(config.port);
 
