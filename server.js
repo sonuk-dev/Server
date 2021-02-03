@@ -3,8 +3,10 @@ const app = new Koa();
 const config = require('./config/index');
 const userRouter = require('./api/routers/user-router');
 const gamesRouter = require('./api/routers/games-router');
+const authRouter = require('./api/routers/auth-router')
 const mongoConnect = require('./libs/mongo-connection');
 const koaBody = require('koa-body');
+const jwt = require('./libs/jwt')
 
 mongoConnect(config);
 app
@@ -21,9 +23,13 @@ app
     }
   })
   .use(koaBody())
-  // .use(userRouter.routes())
-  // .use(userRouter.allowedMethods())
-  .use(userRouter.middleware())
+
+  .use(authRouter.middleware())
+
+  .use(jwt)
+
+  .use(userRouter.routes())
+  .use(userRouter.allowedMethods())
 
   .use(gamesRouter.routes())
   .use(gamesRouter.allowedMethods())
