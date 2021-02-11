@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 let userController = {}
 
-userController.getUserById = (async (ctx, next) => {
+userController.getUserById = (async (ctx) => {
 
   let result = await UserModel.findUserById(ctx.params.id);
   if (result.err)

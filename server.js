@@ -7,13 +7,11 @@ const authRouter = require('./api/routers/auth-router')
 const mongoConnect = require('./libs/mongo-connection');
 const koaBody = require('koa-body');
 const jwt = require('./libs/jwt')
-
+const cors = require('@koa/cors');
 mongoConnect(config);
 app
+  .use(cors({ origin: '*' }))
   .use(async (ctx, next) => {
-    ctx.set('Access-Control-Allow-Origin', '*');
-    ctx.set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-    ctx.set('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
     try {
       await next();
     } catch (err) {
@@ -24,20 +22,18 @@ app
   })
   .use(koaBody())
 
+  .use(jwt.unless({ path: [/^\/auth/] }))
+
   .use(authRouter.middleware())
 
-  .use(jwt)
+  .use(userRouter.middleware())
 
-  .use(userRouter.routes())
-  .use(userRouter.allowedMethods())
+  .use(gamesRouter.middleware())
 
-  .use(gamesRouter.routes())
-  .use(gamesRouter.allowedMethods())
-
-  app.on('error', (err, ctx) => {
-    console.error('server error', err.message);
-    console.error(err);
-  });
+app.on('error', (err, ctx) => {
+  console.error('server error', err.message);
+  console.error(err);
+});
 
 
 app.listen(config.port);

@@ -45,7 +45,6 @@ Users.saveUser = (async (nickname, email, password) => {
     bestScore: 0,
   });
   return user.save();
-
 });
 
 Users.getTopScores = (async (skip, limit) => {
