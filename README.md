@@ -10,15 +10,23 @@ git clone https://github.com/SonaGharibyan/Server
 cd Server
 ```
 
-### Install npm packages
-
-Install the `npm` packages described in the `package.json` and verify that it works:
+### Installing packages
 
 ```shell
 npm install
-npm start
+npm install nodemon
+npm install bcrypt
+npm install koa
+npm install koa-body
+npm install joi
+npm install mongoose
+npm install koa-jwt
 ```
+To start the programme use
 
+```shell
+nodemon server
+```
 ## Available end-points
 
 ### POST /auth/login
