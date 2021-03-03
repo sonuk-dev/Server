@@ -22,7 +22,7 @@ npm install joi
 npm install mongoose
 npm install koa-jwt
 ```
-To start the programme use
+To start the program use
 
 ```shell
 nodemon server
